@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}{{ property.title }}{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-8">
+    <h3>{{ property.title }}</h3>
+    <p>{{ property.description }}</p>
+    <p><strong>Price:</strong> {{ property.price }}</p>
+    <p><strong>Available From:</strong> {{ property.available_from }}</p>
+    <p><strong>Address:</strong> {{ property.address }}, {{ property.locality }}, {{ property.city }}</p>
+    <p><strong>Owner:</strong> {{ property.owner_name }} - {{ property.owner_phone }}</p>
+    {% if property.google_map %}
+    <p><a class="btn btn-outline-primary" href="{{ property.google_map }}" target="_blank">Open in Google Maps</a></p>
+    {% endif %}
+
+    <h5>Gallery</h5>
+    <div class="d-flex gap-2 flex-wrap">
+      {% for img in images %}
+        <img src="{{ url_for('uploaded_file', filename=img) }}" style="height:150px;object-fit:cover">
+      {% endfor %}
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-3">
+      <h5>Actions</h5>
+      <form method="post" action="{{ url_for('add_wishlist', property_id=property.id) }}">
+        <button class="btn btn-outline-warning w-100 mb-2">Add to Wishlist</button>
+      </form>
+      <a href="{{ url_for('contact_owner', property_id=property.id) }}" class="btn btn-primary w-100">Contact Owner</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Properties{% endblock %}
+{% block content %}
+<h3>Properties</h3>
+<form method="get" class="row g-2 mb-3">
+  <div class="col-md-4"><input name="keyword" value="{{ request.args.get('keyword','') }}" class="form-control" placeholder="Keyword"></div>
+  <div class="col-md-3"><input name="city" value="{{ request.args.get('city','') }}" class="form-control" placeholder="City"></div>
+  <div class="col-md-auto"><button class="btn btn-primary">Search</button></div>
+</form>
+<div class="row">
+  {% for prop in properties.items %}
+  <div class="col-md-3 mb-4">
+    <div class="card h-100 hover-shadow">
+      {% set first_image = prop.images.split(',')[0] if prop.images else None %}
+      {% if first_image %}
+      <img src="{{ url_for('uploaded_file', filename=first_image) }}" class="card-img-top" style="height:150px;object-fit:cover">
+      {% else %}
+      <div class="card-img-top placeholder-image" style="height:150px"></div>
+      {% endif %}
+      <div class="card-body">
+        <h6 class="card-title">{{ prop.title }}</h6>
+        <p class="small text-muted">{{ prop.city }} &middot; {{ prop.price }}</p>
+        <a href="{{ url_for('property_details', property_id=prop.id) }}" class="stretched-link"></a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<nav>
+  <ul class="pagination justify-content-center">
+    {% if properties.has_prev %}
+    <li class="page-item"><a class="page-link" href="?page={{ properties.prev_num }}">Previous</a></li>
+    {% endif %}
+    {% for p in properties.iter_pages() %}
+      {% if p %}
+      <li class="page-item {% if p==properties.page %}active{% endif %}"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if properties.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ properties.next_num }}">Next</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endblock %}

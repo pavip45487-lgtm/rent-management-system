@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Edit Property{% endblock %}
+{% block content %}
+<h3>Edit Property</h3>
+<form method="post" enctype="multipart/form-data">
+  {{ form.hidden_tag() }}
+  <div class="row">
+    <div class="col-md-8">
+      <div class="mb-3">{{ form.title.label }}{{ form.title(class_='form-control') }}</div>
+      <div class="mb-3">{{ form.description.label }}{{ form.description(class_='form-control', rows=6) }}</div>
+      <div class="mb-3">{{ form.purpose.label }}{{ form.purpose(class_='form-select') }}</div>
+      <div class="mb-3">{{ form.images.label }}{{ form.images(class_='form-control', multiple=true) }}</div>
+      <p>Existing images:</p>
+      <div class="d-flex gap-2 flex-wrap">
+        {% for im in property.images.split(',') if property.images %}
+          <img src="{{ url_for('uploaded_file', filename=im) }}" style="height:80px;object-fit:cover">
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="mb-2">{{ form.address.label }}{{ form.address(class_='form-control') }}</div>
+      <div class="mb-2">{{ form.city.label }}{{ form.city(class_='form-control') }}</div>
+      <div class="mb-2">{{ form.google_map.label }}{{ form.google_map(class_='form-control') }}</div>
+    </div>
+  </div>
+  <div class="mt-3">{{ form.submit(class_='btn btn-success') }}</div>
+</form>
+{% endblock %}

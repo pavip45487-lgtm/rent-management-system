@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% block title %}Home - RentHome{% endblock %}
+{% block content %}
+<section class="hero-section py-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <span class="eyebrow">Find Your Next Home</span>
+        <h1>Luxury rentals and modern properties for every lifestyle.</h1>
+        <p class="lead">Search curated listings for rent and sale with powerful filters, stunning visuals, and a premium experience.</p>
+        <div class="hero-actions d-flex flex-wrap gap-3 mt-4">
+          <a href="{{ url_for('properties') }}" class="btn btn-primary btn-lg">Browse Properties</a>
+          {% if current_user.is_authenticated %}
+          <a href="{{ url_for('dashboard') }}" class="btn btn-outline-light btn-lg">Go to Dashboard</a>
+          {% else %}
+          <a href="{{ url_for('register') }}" class="btn btn-outline-light btn-lg">Create Account</a>
+          {% endif %}
+        </div>
+        <div class="hero-stats mt-5 d-flex flex-wrap gap-3">
+          <div class="stat-card">
+            <h3>500+</h3>
+            <p>Properties</p>
+          </div>
+          <div class="stat-card">
+            <h3>1000+</h3>
+            <p>Customers</p>
+          </div>
+          <div class="stat-card">
+            <h3>250+</h3>
+            <p>Verified Owners</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-gallery">
+          {% for prop in properties.items[:3] %}
+          {% set image = prop.images.split(',')[0] if prop.images else None %}
+          <div class="hero-card">
+            {% if image %}
+            <img src="{{ url_for('uploaded_file', filename=image) }}" alt="Property image">
+            {% else %}
+            <div class="hero-placeholder"></div>
+            {% endif %}
+            <div class="hero-card-info">
+              <span>{{ prop.property_type|capitalize }}</span>
+              <strong>{{ prop.price }}</strong>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="search-panel py-4">
+  <div class="container">
+    <div class="search-card p-4 shadow-sm">
+      <form method="get" action="{{ url_for('properties') }}" class="row g-3 align-items-end">
+        <div class="col-md-3"><label class="form-label">City</label><input name="city" value="{{ request.args.get('city','') }}" class="form-control" placeholder="Search city"></div>
+        <div class="col-md-3"><label class="form-label">Property Type</label><select name="property_type" class="form-select"><option value="">Any type</option><option value="apartment">Apartment</option><option value="house">House</option><option value="studio">Studio</option><option value="villa">Villa</option></select></div>
+        <div class="col-md-2"><label class="form-label">Min Price</label><input name="min_price" value="{{ request.args.get('min_price','') }}" class="form-control" type="number" placeholder="0"></div>
+        <div class="col-md-2"><label class="form-label">Max Price</label><input name="max_price" value="{{ request.args.get('max_price','') }}" class="form-control" type="number" placeholder="0"></div>
+        <div class="col-md-2"><button class="btn btn-primary w-100">Search</button></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="featured-properties py-5">
+  <div class="container">
+    <div class="section-heading d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <span class="eyebrow">Featured</span>
+        <h2>Highlighted Properties</h2>
+      </div>
+      <a href="{{ url_for('properties') }}" class="link-primary">View All Listings <i class="fas fa-arrow-right ms-2"></i></a>
+    </div>
+    <div class="row g-4">
+      {% for prop in properties.items[:4] %}
+      <div class="col-md-6 col-xl-3">
+        <article class="property-card h-100 shadow-sm">
+          <div class="property-image">
+            {% set first_image = prop.images.split(',')[0] if prop.images else None %}
+            {% if first_image %}
+            <img src="{{ url_for('uploaded_file', filename=first_image) }}" alt="{{ prop.title }}">
+            {% else %}
+            <div class="placeholder-image"></div>
+            {% endif %}
+            <span class="badge badge-status badge-{{ prop.purpose }}">{{ prop.purpose|capitalize }}</span>
+            <button type="button" class="wishlist-btn"><i class="far fa-heart"></i></button>
+          </div>
+          <div class="property-body p-4">
+            <h5>{{ prop.title }}</h5>
+            <p class="text-muted mb-2"><i class="fas fa-map-marker-alt me-2"></i>{{ prop.city }}</p>
+            <div class="property-meta d-flex flex-wrap gap-2 mb-3">
+              <span><i class="fas fa-bed me-1"></i>{{ prop.bedrooms or 0 }} Beds</span>
+              <span><i class="fas fa-bath me-1"></i>{{ prop.bathrooms or 0 }} Baths</span>
+              <span><i class="fas fa-car me-1"></i>{{ prop.parking or 'Parking' }}</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <strong class="price">₹{{ prop.price }}</strong>
+              <a href="{{ url_for('property_details', property_id=prop.id) }}" class="btn btn-sm btn-outline-primary">View Details</a>
+            </div>
+          </div>
+        </article>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="statistics-section py-5 bg-soft">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-3">
+        <div class="stat-card-alt p-4 text-center">
+          <h3>500+</h3>
+          <p>Properties Live</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card-alt p-4 text-center">
+          <h3>1000+</h3>
+          <p>Happy Customers</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card-alt p-4 text-center">
+          <h3>4.9</h3>
+          <p>Average Rating</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card-alt p-4 text-center">
+          <h3>200+</h3>
+          <p>Trusted Owners</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="latest-properties py-5">
+  <div class="container">
+    <div class="section-heading mb-4">
+      <span class="eyebrow">Latest</span>
+      <h2>Newest Listings</h2>
+    </div>
+    <div class="row g-4">
+      {% for prop in properties.items %}
+      <div class="col-md-6 col-xl-4">
+        <article class="property-card-alt h-100 shadow-sm">
+          <div class="property-image-small">
+            {% set first_image = prop.images.split(',')[0] if prop.images else None %}
+            {% if first_image %}
+            <img src="{{ url_for('uploaded_file', filename=first_image) }}" alt="{{ prop.title }}">
+            {% else %}
+            <div class="placeholder-image"></div>
+            {% endif %}
+          </div>
+          <div class="property-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge badge-status badge-{{ prop.purpose }}">{{ prop.purpose|capitalize }}</span>
+              <span class="text-muted small">{{ prop.property_type|capitalize }}</span>
+            </div>
+            <h5>{{ prop.title }}</h5>
+            <p class="text-muted mb-3">{{ prop.city }} · ₹{{ prop.price }}</p>
+            <div class="property-meta d-flex flex-wrap gap-2 mb-3">
+              <span><i class="fas fa-bed"></i> {{ prop.bedrooms or 0 }}</span>
+              <span><i class="fas fa-bath"></i> {{ prop.bathrooms or 0 }}</span>
+              <span><i class="fas fa-car"></i> {{ prop.parking or '0' }}</span>
+            </div>
+            <a href="{{ url_for('property_details', property_id=prop.id) }}" class="link-primary">View Details <i class="fas fa-long-arrow-alt-right ms-2"></i></a>
+          </div>
+        </article>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="testimonials py-5 bg-soft">
+  <div class="container">
+    <div class="section-heading mb-4">
+      <span class="eyebrow">Reviews</span>
+      <h2>What customers love</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="testimonial-card p-4 shadow-sm">
+          <p>"The search experience was smooth and the listings were beautiful. I found my new rental in one day!"</p>
+          <h6>Priya Sharma</h6>
+          <span class="text-muted">Marketing Manager</span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="testimonial-card p-4 shadow-sm">
+          <p>"Amazing support from owners and great property details. The app feels premium and easy to use."</p>
+          <h6>Amit Verma</h6>
+          <span class="text-muted">Sales Executive</span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="testimonial-card p-4 shadow-sm">
+          <p>"A beautiful platform with responsive designs and lovely property cards. Highly recommended."</p>
+          <h6>Sana Khan</h6>
+          <span class="text-muted">Designer</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Wishlist{% endblock %}
+{% block content %}
+<h3>Your Wishlist</h3>
+<div class="row">
+  {% for item in items.items %}
+  <div class="col-md-4 mb-4">
+    <div class="card h-100">
+      {% set prop = item.property %}
+      {% set img = prop.images.split(',')[0] if prop.images else None %}
+      {% if img %}
+      <img src="{{ url_for('uploaded_file', filename=img) }}" class="card-img-top" style="height:180px;object-fit:cover">
+      {% endif %}
+      <div class="card-body">
+        <h5>{{ prop.title }}</h5>
+        <p class="text-truncate">{{ prop.description }}</p>
+        <form method="post" action="{{ url_for('remove_wishlist', item_id=item.id) }}" onsubmit="return confirm('Remove?')">
+          <button class="btn btn-danger btn-sm">Remove</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<nav>
+  <ul class="pagination justify-content-center">
+    {% if items.has_prev %}
+    <li class="page-item"><a class="page-link" href="?page={{ items.prev_num }}">Previous</a></li>
+    {% endif %}
+    {% for p in items.iter_pages() %}
+      {% if p %}
+      <li class="page-item {% if p==items.page %}active{% endif %}"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if items.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ items.next_num }}">Next</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endblock %}

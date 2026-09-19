@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Contact{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-8">
+    <h3>Contact</h3>
+    <form method="post">
+      {{ form.hidden_tag() }}
+      <div class="mb-3">{{ form.name.label }}{{ form.name(class_='form-control') }}</div>
+      <div class="mb-3">{{ form.email.label }}{{ form.email(class_='form-control') }}</div>
+      <div class="mb-3">{{ form.message.label }}{{ form.message(class_='form-control', rows=6) }}</div>
+      <div class="mb-3">{{ form.submit(class_='btn btn-primary') }}</div>
+    </form>
+  </div>
+</div>
+{% endblock %}
