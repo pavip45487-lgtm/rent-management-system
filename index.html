@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rent Management System</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <h1>Rent Management System</h1>
+      <div id="userInfo" class="user-info hidden">
+        <span id="welcomeText"></span>
+        <button id="logoutButton" class="button-secondary">Logout</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="authSection" class="panel auth-panel">
+        <div class="auth-tabs">
+          <button id="showLoginButton" class="tab-button active">Login</button>
+          <button id="showRegisterButton" class="tab-button">Register</button>
+        </div>
+
+        <div id="loginForm" class="auth-form">
+          <h2>Login</h2>
+          <label>Username</label>
+          <input id="loginUsername" type="text" placeholder="Enter username" />
+          <label>Password</label>
+          <input id="loginPassword" type="password" placeholder="Enter password" />
+          <button id="loginButton" class="button-primary">Login</button>
+          <p class="message" id="loginMessage"></p>
+        </div>
+
+        <div id="registerForm" class="auth-form hidden">
+          <h2>Register</h2>
+          <label>Username</label>
+          <input id="registerUsername" type="text" placeholder="Choose a username" />
+          <label>Password</label>
+          <input id="registerPassword" type="password" placeholder="Choose a password" />
+          <label>Full Name</label>
+          <input id="registerFullName" type="text" placeholder="Your full name" />
+          <label>Phone Number</label>
+          <input id="registerPhone" type="tel" placeholder="Contact phone" />
+          <button id="registerButton" class="button-primary">Create Account</button>
+          <p class="message" id="registerMessage"></p>
+        </div>
+      </section>
+
+      <section id="homeSection" class="panel home-panel hidden">
+        <div class="home-actions">
+          <button class="button-primary" data-action="add">Add House Details</button>
+          <button class="button-secondary" data-action="view-all">View All Listings</button>
+          <button class="button-secondary" data-action="view-rent">View Rent</button>
+          <button class="button-secondary" data-action="view-lease">View Lease</button>
+          <button class="button-secondary" data-action="view-sale">View Sale</button>
+          <button class="button-secondary" data-action="view-mine">My Listings</button>
+        </div>
+
+        <section id="addHouseSection" class="panel hidden">
+          <h2 id="houseFormTitle">Add House Details</h2>
+          <div class="form-grid">
+            <label>Listing Title</label>
+            <input id="houseTitle" type="text" placeholder="Example: Spacious 2BHK near market" />
+            <label>Type</label>
+            <select id="houseType">
+              <option value="1BHK">1 BHK</option>
+              <option value="2BHK">2 BHK</option>
+              <option value="3BHK">3 BHK</option>
+              <option value="Studio">Studio</option>
+              <option value="Other">Other</option>
+            </select>
+            <label>Category</label>
+            <select id="houseCategory">
+              <option value="Rent">Rent</option>
+              <option value="Lease">Lease</option>
+              <option value="Sale">Sale</option>
+            </select>
+            <label>Status</label>
+            <select id="houseStatus">
+              <option value="Available">Available</option>
+              <option value="Sold">Sold</option>
+            </select>
+            <label>Rent / Price</label>
+            <input id="housePrice" type="number" placeholder="Enter price" />
+            <label>Contact Details</label>
+            <input id="houseContact" type="text" placeholder="Phone or email" />
+            <label>Address</label>
+            <input id="houseAddress" type="text" placeholder="Street, city, state" />
+            <label>Description</label>
+            <textarea id="houseDescription" rows="4" placeholder="Describe the house"></textarea>
+            <label>Image URLs</label>
+            <textarea id="houseImages" rows="3" placeholder="Separate URLs with commas"></textarea>
+            <label>Additional Details</label>
+            <textarea id="houseExtra" rows="3" placeholder="Any other information"></textarea>
+          </div>
+          <div class="form-actions">
+            <button id="saveHouseButton" class="button-primary">Save Listing</button>
+            <button id="cancelHouseButton" class="button-secondary">Cancel</button>
+            <p class="message" id="houseMessage"></p>
+          </div>
+        </section>
+
+        <section id="listSection" class="panel hidden">
+          <h2 id="listTitle">Available Houses</h2>
+          <div id="houseList" class="house-list"></div>
+        </section>
+
+        <section id="detailSection" class="panel hidden">
+          <h2>House Details</h2>
+          <div id="houseDetail" class="house-detail"></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
